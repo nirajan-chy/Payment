@@ -1,10 +1,9 @@
 const { Router } = require("express");
-const {
-  register,
-} = require("next/dist/next-devtools/userspace/pages/pages-dev-overlay-setup");
+const { register, login } = require("../controllers/auth.controller");
 
 const userRouter = Router();
 
 userRouter.post("/register", register);
+userRouter.post("/login", login);
 
 module.exports = userRouter;

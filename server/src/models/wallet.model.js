@@ -11,15 +11,20 @@ const Wallet = postgres.define("wallet", {
   userId: {
     type: DataTypes.UUID,
     allowNull: false,
+    unique: true,
   },
   balance: {
     type: DataTypes.DECIMAL(15, 2),
-    defaultValue: 0.0,
+    defaultValue: 5000000,
+  },
+  status: {
+    type: DataTypes.ENUM("active", "frozen"),
+    defaultValue: "active",
   },
 });
 
-User.hasOne(Wallet);
-Wallet.belongsTo(User);
+User.hasOne(Wallet, { foreignKey: "userId" });
+Wallet.belongsTo(User, { foreignKey: "userId" });
 
 module.exports = {
   Wallet,

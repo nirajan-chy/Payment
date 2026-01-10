@@ -1,0 +1,13 @@
+POST http://localhost:5000/wallet/send
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2Mzc5YzMzLTRmNDAtNGU3NC1iZjNiLWRiNzJhZTI3NDJlYyIsImlhdCI6MTc2ODA1NDUwOSwiZXhwIjoxNzY4MDU4MTA5fQ.7T-eFrkuzhwizgU6It2oIQD4fnNqr-SYZFXYHVegO2U
+
+{
+  "toUserId": "58da3926-0c9c-4495-b84f-b8c1aaf07a0f",
+  "amount": 500
+}
+
+
+###
+GET http://localhost:5000/wallet/balance
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2Mzc5YzMzLTRmNDAtNGU3NC1iZjNiLWRiNzJhZTI3NDJlYyIsImlhdCI6MTc2ODA1NDUwOSwiZXhwIjoxNzY4MDU4MTA5fQ.7T-eFrkuzhwizgU6It2oIQD4fnNqr-SYZFXYHVegO2Uconst { secret_key } = require("../config/env");

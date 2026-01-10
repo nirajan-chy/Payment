@@ -26,6 +26,10 @@ const User = postgres.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     timestamps: true,

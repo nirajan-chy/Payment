@@ -2,7 +2,16 @@ POST http://localhost:5000/user/register
 Content-Type:  application/json
 
 {
-  "name" : "Nirajan ",
+  "name" : "Samir ",
+  "email" : "samir@gmail.com",
+  "password" : "samir!@#"
+}
+
+###
+POST http://localhost:5000/user/login
+Content-Type: application/json
+
+{
   "email" : "nirajan@gmail.com",
   "password" : "nirajan!@#"
 }
