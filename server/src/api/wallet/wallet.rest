@@ -1,13 +1,15 @@
 POST http://localhost:5000/wallet/send
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2Mzc5YzMzLTRmNDAtNGU3NC1iZjNiLWRiNzJhZTI3NDJlYyIsImlhdCI6MTc2ODA1NDUwOSwiZXhwIjoxNzY4MDU4MTA5fQ.7T-eFrkuzhwizgU6It2oIQD4fnNqr-SYZFXYHVegO2U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA1NmZmMGU0LTYzMzQtNDhmZi04ZDA5LWE5YjU5OTM1Y2ZiYSIsImlhdCI6MTc2ODExNTM1NCwiZXhwIjoxNzY4MTE4OTU0fQ.qFjpKK1GvXwuCSPIrq4P9iocZUXG-l39iGcwPNtHixc
 
 {
-  "toUserId": "58da3926-0c9c-4495-b84f-b8c1aaf07a0f",
+  "toUserId": "36fc7072-599e-4d54-867a-6f4ee6935b96",
+  "fromUserId" : "056ff0e4-6334-48ff-8d09-a9b59935cfba",
   "amount": 500
 }
 
 
 ###
 GET http://localhost:5000/wallet/balance
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2Mzc5YzMzLTRmNDAtNGU3NC1iZjNiLWRiNzJhZTI3NDJlYyIsImlhdCI6MTc2ODA1NDUwOSwiZXhwIjoxNzY4MDU4MTA5fQ.7T-eFrkuzhwizgU6It2oIQD4fnNqr-SYZFXYHVegO2Uconst { secret_key } = require("../config/env");
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA1NmZmMGU0LTYzMzQtNDhmZi04ZDA5LWE5YjU5OTM1Y2ZiYSIsImlhdCI6MTc2ODExNTM1NCwiZXhwIjoxNzY4MTE4OTU0fQ.qFjpKK1GvXwuCSPIrq4P9iocZUXG-l39iGcwPNtHixc
+

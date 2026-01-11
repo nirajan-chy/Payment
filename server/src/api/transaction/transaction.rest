@@ -1,0 +1,2 @@
+GET http://localhost:5000/transaction/tx
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA1NmZmMGU0LTYzMzQtNDhmZi04ZDA5LWE5YjU5OTM1Y2ZiYSIsImlhdCI6MTc2ODExNTM1NCwiZXhwIjoxNzY4MTE4OTU0fQ.qFjpKK1GvXwuCSPIrq4P9iocZUXG-l39iGcwPNtHixc

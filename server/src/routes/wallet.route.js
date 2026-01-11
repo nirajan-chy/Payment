@@ -6,4 +6,5 @@ const walletRouter = Router();
 walletRouter.get("/balance", isAuthenticated, getbalance);
 walletRouter.post("/send", isAuthenticated, sendMoney);
 
+
 module.exports = walletRouter;

@@ -4,6 +4,9 @@ const Ledger = require("../models/ledger.model");
 const Transaction = require("../models/transition.model");
 const { Wallet } = require("../models/wallet.model");
 const { v4: uuidv4 } = require("uuid");
+const { default: loadConfig } = require("next/dist/server/config");
+const { createTransaction } = require("./transaction.controller");
+
 exports.getbalance = async (req, res) => {
   try {
     if (!req.user || !req.user.id) {
@@ -28,80 +31,56 @@ exports.getbalance = async (req, res) => {
 
 exports.sendMoney = async (req, res) => {
   try {
-    const { toUserId, amount } = req.body;
-    if (!toUserId || Number(amount) <= 0)
+    const { toUserId, fromUserId, amount } = req.body;
+
+    if (!toUserId || !fromUserId || !amount || Number(amount) <= 0) {
       return res.status(400).json({
-        message: "invalid amount ",
+        message: "Invalid input",
       });
+    }
+
+    // console.log("to:", toUserId);
+    // console.log("from:", fromUserId);
+    // console.log("amount:", amount);
+
     await postgres.transaction(async t => {
-      const userId = req.user.id;
+      const userId = req.user.id; 
 
       const senderWallet = await Wallet.findOne({
         where: { userId },
         transaction: t,
-        lock: SequelizeTransaction.LOCK.UPDATE,
+        lock: t.LOCK.UPDATE,
       });
-
-      if (!senderWallet)
-        return res.status(404).json({ message: "Sender wallet not found" });
-
-      if (senderWallet.status === "frozen")
-        return res.status(400).json({ message: "Wallet is frozen" });
-
-      if (Number(senderWallet.balance) < Number(amount))
-        return res.status(400).json({ message: "insufficient balance" });
 
       const receiverWallet = await Wallet.findOne({
         where: { userId: toUserId },
         transaction: t,
-        lock: SequelizeTransaction.LOCK.UPDATE,
+        lock: t.LOCK.UPDATE,
       });
 
-      if (!receiverWallet)
-        return res.status(404).json({ message: "Receiver wallet not found" });
+      // Validate wallets
+      if (!senderWallet) throw new Error("Sender wallet not found");
+      if (!receiverWallet) throw new Error("Receiver wallet not found");
+      if (senderWallet.status === "frozen")
+        throw new Error("Sender wallet frozen");
+      if (receiverWallet.status === "frozen")
+        throw new Error("Receiver wallet frozen");
+      if (Number(senderWallet.balance) < Number(amount))
+        throw new Error("Insufficient balance");
 
-      senderWallet.balance = (
-        Number(senderWallet.balance) - Number(amount)
-      ).toFixed(2);
-      receiverWallet.balance = (
-        Number(receiverWallet.balance) + Number(amount)
-      ).toFixed(2);
+      // Update balances
+      senderWallet.balance -= Number(amount);
+      receiverWallet.balance += Number(amount);
 
       await senderWallet.save({ transaction: t });
       await receiverWallet.save({ transaction: t });
 
-      const tx = await Transaction.create(
-        {
-          reference: uuidv4(),
-          fromWalletId: senderWallet.id,
-          toWalletId: receiverWallet.id,
-          amount: Number(amount),
-          type: "transfer",
-          status: "success",
-        },
-        { transaction: t }
-      );
-
-      await Ledger.bulkCreate(
-        [
-          {
-            walletId: senderWallet.id,
-            transactionId: tx.id,
-            amount: -Number(amount),
-            balanceAfter: senderWallet.balance,
-          },
-          {
-            walletId: receiverWallet.id,
-            transactionId: tx.id,
-            amount: Number(amount),
-            balanceAfter: receiverWallet.balance,
-          },
-        ],
-        { transaction: t }
-      );
+      // CREATE TRANSACTION INSIDE the same transaction
+      await createTransaction({ senderWallet, receiverWallet, amount, t });
     });
-
-    res.json({ message: "Money sent successfully" });
+    res.status(200).json({
+      message: "Money send successfully",
+    });
   } catch (error) {
     res.status(500).json({
       message: "This is send money" + error.message,
