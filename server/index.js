@@ -1,5 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
+
+const cors = require("cors");
 const { testPostgresConnection } = require("./src/config/postgres.db");
 const userRouter = require("./src/routes/user.route");
 const walletRouter = require("./src/routes/wallet.route");
@@ -9,6 +11,15 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 const PORT = process.env.PORT || 5000;
 
